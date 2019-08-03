@@ -1,0 +1,3 @@
+index:
+    path: /api/generate
+    controller: 'App\Controller\GenerateController::actionGenerate'
