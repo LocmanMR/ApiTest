@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 namespace App\Controller;
 
 use Symfony\Component\HttpFoundation\Response;
@@ -14,23 +16,29 @@ class GenerateController
         $this->generateObj = $obj;
     }
 
-    public function actionGenerate()
+    /**
+     * @return Response
+     * @throws \Doctrine\DBAL\DBALException
+     */
+    public function actionGenerate(): Response
     {
-        //$a = $this->generateObj->generator();
         $request = Request::createFromGlobals();
 
-        return new Response($request->query->get('papa'));
-        if (isset($_POST['length'])) {
-            $_POST['length'] = json_decode($_POST['length']);
-            $data = (array)$_POST['length'];
+        if ($request->query->get('length')) {
+            $length = urldecode($request->query->get('length'));
+            $length = json_decode($length);
+            $data = (array)$length;
             if ($data['length'] !== '' && $data['type'] !== '') {
                 $rand = $this->generateObj->generator($data);
-                return $response = $this->trueResponseBuilder($rand);
+                $response = $this->trueResponseBuilder($rand);
+                return new Response($response);
             } else {
-                return $response = $this->falseResponseBuilder('Make sure you enter all the required parameters');
+                $response = $this->falseResponseBuilder('Make sure you enter all the required parameters');
+                return new Response($response);
             }
         } else {
-            return $response = $this->falseResponseBuilder('Check the relevance of your data');
+            $response = $this->falseResponseBuilder('Check the relevance of your data');
+            return new Response($response);
         }
     }
 

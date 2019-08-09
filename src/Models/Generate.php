@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use Doctrine\DBAL\Connection;
 
 class Generate
 {
@@ -10,10 +11,17 @@ class Generate
     private const TYPE_STR = '2';
     private const TYPE_MIX = '3';
     private const TYPE_GUID = '4';
+    private $connection;
+
+    public function __construct(Connection $connection)
+    {
+        $this->connection = $connection;
+    }
 
     /**
      * @param array $characteristic
      * @return array
+     * @throws \Doctrine\DBAL\DBALException
      */
     public function generator(array $characteristic): array
     {
@@ -101,20 +109,19 @@ class Generate
      * @param string $value
      * @param string $type
      * @return bool|string
+     * @throws \Doctrine\DBAL\DBALException
      */
     private function setDb(string $value, string $type)
     {
-        $db = \Db::getConnection();
-
         $sql = 'INSERT INTO rand(value, type) VALUES (:value, :type)';
 
-        $result = $db->prepare($sql);
+        $result = $this->connection->prepare($sql);
 
-        $result->bindParam(':value', $value, \PDO::PARAM_STR);
-        $result->bindParam(':type', $type, \PDO::PARAM_STR);
+        $result->bindValue(':value', $value);
+        $result->bindValue(':type', $type);
 
         if ($result->execute()) {
-            return $db->lastInsertId();
+            return $this->connection->lastInsertId();
         }
         return false;
     }

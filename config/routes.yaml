@@ -1,3 +1,7 @@
 index:
     path: /api/generate
     controller: 'App\Controller\GenerateController::actionGenerate'
+
+show:
+    path: /api/retrieve
+    controller: 'App\Controller\RetrieveController::actionValue'
