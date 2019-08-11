@@ -1,8 +1,6 @@
 <?php
 declare(strict_types=1);
 
-require_once __DIR__ . '/../../../src/Models/Generate.php';
-
 use PHPUnit\Framework\TestCase;
 use Doctrine\DBAL\Connection;
 use App\Models\Generate;
