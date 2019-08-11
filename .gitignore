@@ -16,3 +16,7 @@
 .idea
 /config/db_params.php
 .env
+###> phpunit/phpunit ###
+/phpunit.xml
+.phpunit.result.cache
+###< phpunit/phpunit ###

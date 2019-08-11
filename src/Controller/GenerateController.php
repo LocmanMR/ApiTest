@@ -23,9 +23,8 @@ class GenerateController
     public function actionGenerate(): Response
     {
         $request = Request::createFromGlobals();
-
-        if ($request->query->get('length')) {
-            $length = urldecode($request->query->get('length'));
+        if ($request->request->get('length')) {
+            $length = urldecode($request->request->get('length'));
             $length = json_decode($length);
             $data = (array)$length;
             if ($data['length'] !== '' && $data['type'] !== '') {
